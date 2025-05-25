@@ -1,13 +1,17 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{320BD419-4D22-0DDC-BDBB-9DB20CE68E61}",
+	"EngineAssociation": "{BB580246-4F6D-10C3-FBFF-229DF9947DA3}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
 		{
 			"Name": "ArpgProject",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"AIModule"
+			]
 		}
 	],
 	"Plugins": [
