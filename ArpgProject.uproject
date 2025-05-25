@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{320BD419-4D22-0DDC-BDBB-9DB20CE68E61}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "ArpgProject",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	]
+}
