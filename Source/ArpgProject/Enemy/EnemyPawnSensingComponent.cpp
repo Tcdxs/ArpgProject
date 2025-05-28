@@ -11,7 +11,10 @@ UEnemyPawnSensingComponent::UEnemyPawnSensingComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
+	Enemy = Cast<ACPP_Enemy>(GetOwner());
+	
 	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComponent"));
+	check(PawnSensingComponent);
 	PawnSensingComponent->SetPeripheralVisionAngle(EnemyVisionAngle);
 	PawnSensingComponent->SightRadius = EnemySightRadius;
 	PawnSensingComponent->HearingThreshold = EnemyHearingThreshold;
@@ -32,18 +35,14 @@ void UEnemyPawnSensingComponent::BeginPlay()
 
 void UEnemyPawnSensingComponent::OnSeePawn(APawn* Pawn)
 {
-	UE_LOG(LogTemp, Warning, TEXT("敌人发现了玩家：%s"), *Pawn->GetName());
 	if (Enemy == nullptr || Enemy->GetController() == nullptr) return;
-	ACPP_EnemyAIController* AIController = Cast<ACPP_EnemyAIController>(Enemy->GetController());
-	if (AIController)
-	{
-		AIController->ChasePlayer(Pawn);
-	}
+	UE_LOG(LogTemp, Warning, TEXT("敌人发现了玩家：%s"), *Pawn->GetName());
 }
 
 
 void UEnemyPawnSensingComponent::OnHearNoise(APawn* Pawn, const FVector& Location, float Volume)
 {
+	if (Enemy == nullptr || Enemy->GetController() == nullptr) return;
 	UE_LOG(LogTemp, Warning, TEXT("敌人发现了玩家：%s"), *Pawn->GetName());
 }
 
@@ -52,18 +51,6 @@ void UEnemyPawnSensingComponent::OnHearNoise(APawn* Pawn, const FVector& Locatio
 void UEnemyPawnSensingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (Enemy == nullptr || PawnSensingComponent == nullptr) return;
-	DrawDebugSphere(
-	   GetWorld(),
-	   Enemy->GetActorLocation(),
-	   PawnSensingComponent->SightRadius,
-	   24, 
-	   FColor::Blue,
-	   false, 
-	   -1.f,  
-	   0,     
-	   1.f
-	   );
+	
 }
 

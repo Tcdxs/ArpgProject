@@ -21,13 +21,13 @@ public:
 	friend class UCPP_Enemy;
 
 private:
-	ACPP_Enemy* Enemy;
+	TObjectPtr<ACPP_Enemy> Enemy;
 
 	UPROPERTY(EditAnywhere,Category="PawnSensingComponent")
-	class UPawnSensingComponent* PawnSensingComponent;
+	TObjectPtr<UPawnSensingComponent> PawnSensingComponent;
 
 	UPROPERTY(EditAnywhere,Category="PawnSensingComponent")
-	float EnemyVisionAngle = 45.f;
+	float EnemyVisionAngle = 60.f;
 
 	UPROPERTY(EditAnywhere,Category="PawnSensingComponent")
 	float EnemySightRadius = 2000.f;
@@ -45,7 +45,7 @@ protected:
 	virtual void OnSeePawn(APawn* Pawn);
 
 	UFUNCTION()
-	virtual void OnHearNoise(APawn* Pawn, const FVector& Location, float Volume);
+	virtual void OnHearNoise(APawn* Pawn, const FVector& Location, float Volume);	
 public:	
 	
 	
