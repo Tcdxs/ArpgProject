@@ -5,14 +5,13 @@
 #include "CoreMinimal.h"
 #include "ArpgProject/Enemy/CPP_EnemyBase.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
-#include "BTTask_Idle.generated.h"
+#include "BTTask_Patrol.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ARPGPROJECT_API UBTTask_Idle : public UBTTaskNode
+class ARPGPROJECT_API UBTTask_Patrol : public UBTTaskNode
 {
 	GENERATED_BODY()
 
@@ -21,5 +20,7 @@ public:
 
 private:
 	TObjectPtr<ACPP_EnemyBase> Enemy;
+
+	int32 CurrentPatrolIndex;
 	
 };

@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CPP_Enemy.h"
+#include "CPP_EnemyBase.h"
+#include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
 #include "Components/ActorComponent.h"
+#include "Perception/PawnSensingComponent.h"
 #include "EnemyPawnSensingComponent.generated.h"
 
 
@@ -21,10 +23,21 @@ public:
 	friend class UCPP_Enemy;
 
 private:
-	TObjectPtr<ACPP_Enemy> Enemy;
+	TObjectPtr<ACPP_EnemyBase> Enemy;
+
+	FTimerHandle SightLostTimerHandle;
+
+	UFUNCTION()
+	void HandleSightLost();
+	
+	UPROPERTY()
+	TObjectPtr<ACPP_EnemyAIController> CPP_EnemyAIController;
 
 	UPROPERTY(EditAnywhere,Category="PawnSensingComponent")
 	TObjectPtr<UPawnSensingComponent> PawnSensingComponent;
+	
+	UPROPERTY(EditAnywhere,Category="PawnSensingComponent")
+	TObjectPtr<APlayerCharacter> FindingCharacter;
 
 	UPROPERTY(EditAnywhere,Category="PawnSensingComponent")
 	float EnemyVisionAngle = 60.f;

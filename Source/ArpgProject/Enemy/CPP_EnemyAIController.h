@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+
 
 #pragma once
 
@@ -7,6 +7,7 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "CPP_EnemyAIController.generated.h"
 
+class ACPP_EnemyBase;
 /**
  * 
  */
@@ -21,9 +22,12 @@ public:
 	virtual void BeginPlay() override;
 
 protected:
-	UPROPERTY()
-	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponent;
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UBehaviorTree> BehaviorTreeComponent;
 private:
-	
+	friend class ACPP_Enemy;
+
+	UPROPERTY()
+	TObjectPtr<ACPP_EnemyBase> Enemy;
 public:	
 };

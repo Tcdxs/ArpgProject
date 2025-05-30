@@ -1,14 +1,13 @@
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "CPP_EnemyAIController.h"
-#include "BehaviorTree/BehaviorTreeComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "GameFramework/Pawn.h"
-#include "Perception/PawnSensingComponent.h"
-#include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
-#include "CPP_Enemy.generated.h"
+#include "Components/WidgetComponent.h"
+#include "GameFramework/Character.h"
+#include "PatrolPoints/PatrolPoint.h"
+#include "CPP_EnemyBase.generated.h"
 
 UENUM(BlueprintType)
 enum class EEnemyState : uint8
@@ -22,25 +21,29 @@ enum class EEnemyState : uint8
 	EES_Max UMETA(DisplayName = "DefaultMax"),
 };
 
-class UWidgetComponent;
-
 UCLASS()
-class ARPGPROJECT_API ACPP_Enemy : public APawn
+class ARPGPROJECT_API ACPP_EnemyBase : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	ACPP_Enemy();
+	ACPP_EnemyBase();
 
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	UPROPERTY(VisibleAnywhere)
+	EEnemyState EnemyState;
 
+	UPROPERTY(EditInstanceOnly, Category="AI Patrol")
+	TArray<APatrolPoint*> PatrolPoint;
+
+	UFUNCTION(BlueprintCallable, Category="AI Patrol")
+	const TArray<APatrolPoint*>& GetPatrolSpheres() const { return PatrolPoint; }
+	
 private:
 	friend class UEnemyPawnSensingComponent;
-	
-	UPROPERTY(EditAnywhere,Category="EnemyMesh")
-	TObjectPtr<USkeletalMeshComponent> SkeletalMeshComponent;
 
 	UPROPERTY(EditAnywhere,Category="EnemyMesh")
 	TObjectPtr<UCapsuleComponent> CollisionComponent;
@@ -51,36 +54,19 @@ private:
 	UPROPERTY(visibleAnywhere)
 	TObjectPtr<UEnemyPawnSensingComponent> PawnSensingComponent;
 
-	UPROPERTY(EditAnywhere, Category="AI")
-	TObjectPtr<UBehaviorTree> BehaviorTree;
-
 	UPROPERTY()
 	TObjectPtr<ACPP_EnemyAIController> CPP_EnemyAIController;
-
-	UPROPERTY(VisibleAnywhere)
-	EEnemyState EnemyState;
 
 	UPROPERTY(EditAnywhere,Category="Attribute")
 	float HP;
 
 	UPROPERTY(EditAnywhere,Category="Attribute")
 	float MaxHP = 100.f;
-		
-	UPROPERTY(EditAnywhere, Category = "Attribute")
-	class APlayerCharacter* TargetPlayer;
-
-	UPROPERTY(EditAnywhere, Category = "Attribute")
-	TSubclassOf<APlayerCharacter> InsPlayer;
-	
 protected:
 	virtual void BeginPlay() override;
 
-	virtual void FindTargetPlayer();
 public:	
-
 
 	
 	
 };
-
-
