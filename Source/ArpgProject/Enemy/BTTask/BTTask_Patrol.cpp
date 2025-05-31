@@ -5,6 +5,7 @@
 
 #include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Navigation/PathFollowingComponent.h"
 
 
 EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -19,20 +20,31 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	{
 		return EBTNodeResult::Failed;
 	}
-	if (!BlackboardComp->GetValueAsObject("PlayerCharacter"))
+	if (!BlackboardComp->GetValueAsObject("PlayerCharacter")) //未检查到玩家
 	{
+		Enemy = Cast<ACPP_EnemyBase>(AIController->GetPawn());
 		if (Enemy)
 		{
 			Enemy->EnemyState = EEnemyState::EES_Patrol;
 			const TArray<APatrolPoint*>& Spheres = Enemy->GetPatrolSpheres();
 			if (Spheres.Num() == 0) return EBTNodeResult::Failed;
 			CurrentPatrolIndex = BlackboardComp->GetValueAsInt("CurrentPatrolIndex");
-			CurrentPatrolIndex = (CurrentPatrolIndex + 1) % Spheres.Num();
-			FVector NextLocation = Spheres[CurrentPatrolIndex]->GetActorLocation();
-			BlackboardComp->SetValueAsVector("PatrolTarget", NextLocation);
-			BlackboardComp->SetValueAsInt("CurrentPatrolIndex", CurrentPatrolIndex);
-			AIController->MoveToLocation(NextLocation);
-			return EBTNodeResult::Succeeded;
+			IsWait = BlackboardComp->GetValueAsBool("ShouldWait");
+			if (!IsWait)
+			{
+				FVector NextLocation = Spheres[CurrentPatrolIndex]->GetActorLocation();
+				BlackboardComp->SetValueAsVector("PatrolTarget", NextLocation);
+				FAIMoveRequest MoveReq(NextLocation);
+				MoveReq.SetAcceptanceRadius(5.f);
+				FPathFollowingRequestResult MoveResult = AIController->MoveTo(MoveReq);
+				if (MoveResult.Code == EPathFollowingRequestResult::AlreadyAtGoal)
+				{
+					CurrentPatrolIndex = (CurrentPatrolIndex + 1) % Spheres.Num();
+					BlackboardComp->SetValueAsBool("IsWait", true);
+					BlackboardComp->SetValueAsInt("CurrentPatrolIndex", CurrentPatrolIndex);
+					return EBTNodeResult::Succeeded;
+				}
+			}
 		}
 	}
 	return EBTNodeResult::Failed;

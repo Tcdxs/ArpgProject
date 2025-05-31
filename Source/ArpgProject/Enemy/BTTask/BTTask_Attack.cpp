@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_PatrolMoving.h"
+#include "BTTask_Attack.h"
 
 #include "ArpgProject/Enemy/CPP_EnemyAIController.h"
 #include "ArpgProject/Enemy/CPP_EnemyBase.h"
@@ -9,7 +9,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 
-EBTNodeResult::Type UBTTask_PatrolMoving::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	ACPP_EnemyAIController* AIController = Cast<ACPP_EnemyAIController>(OwnerComp.GetAIOwner());
 	if (!AIController)
@@ -21,15 +21,15 @@ EBTNodeResult::Type UBTTask_PatrolMoving::ExecuteTask(UBehaviorTreeComponent& Ow
 	{
 		return EBTNodeResult::Failed;
 	}
-	if (!BlackboardComp->GetValueAsObject("PlayerCharacter"))
+	if (BlackboardComp->GetValueAsObject("PlayerCharacter"))
 	{
+		Enemy = Cast<ACPP_EnemyBase>(AIController->GetPawn());
 		if (Enemy)
 		{
-			Enemy->EnemyState = EEnemyState::EES_Patrol;
-			FVector PatrolLocation = BlackboardComp->GetValueAsVector("PatrolTarget");
-			AIController->MoveToLocation(PatrolLocation);
-			if (Enemy->GetActorLocation() == PatrolLocation)return EBTNodeResult::Succeeded;
-			return EBTNodeResult::Failed;
+			Enemy->EnemyState = EEnemyState::EES_Attack;
+			APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(BlackboardComp->GetValueAsObject("PlayerCharacter"));
+			AIController->StopMovement();
+			return EBTNodeResult::Succeeded;
 		}
 	}
 	return EBTNodeResult::Failed;

@@ -21,5 +21,4 @@ public:
 
 private:
 	TObjectPtr<ACPP_EnemyBase> Enemy;
-	
 };

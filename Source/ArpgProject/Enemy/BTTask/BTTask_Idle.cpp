@@ -21,10 +21,16 @@ EBTNodeResult::Type UBTTask_Idle::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 	{
 		return EBTNodeResult::Failed;
 	}
-	if (!BlackboardComp->GetValueAsObject("PlayerCharacter"))
-	{
-		if (Enemy) { Enemy->EnemyState = EEnemyState::EES_Idle; }
-		return EBTNodeResult::Succeeded;
-	}
-	return EBTNodeResult::Failed;
+		if (!BlackboardComp->GetValueAsObject("PlayerCharacter"))
+		{
+			Enemy = Cast<ACPP_EnemyBase>(AIController->GetPawn());
+			if (Enemy)
+			{
+				Enemy->EnemyState = EEnemyState::EES_Idle; 
+				AIController->StopMovement();
+				BlackboardComp->SetValueAsBool("IsWait", false);
+				return EBTNodeResult::Succeeded;
+			}
+		}
+		return EBTNodeResult::Failed;
 }
