@@ -26,10 +26,14 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		Enemy = Cast<ACPP_EnemyBase>(AIController->GetPawn());
 		if (Enemy)
 		{
-			Enemy->EnemyState = EEnemyState::EES_Attack;
-			APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(BlackboardComp->GetValueAsObject("PlayerCharacter"));
-			AIController->StopMovement();
-			return EBTNodeResult::Succeeded;
+			if (BlackboardComp->GetValueAsBool("CanAttack") && !BlackboardComp->GetValueAsBool("bAttacking"))
+			{
+				Enemy->EnemyState = EEnemyState::EES_Attack;
+				APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(BlackboardComp->GetValueAsObject("PlayerCharacter"));
+				AIController->StopMovement();
+				BlackboardComp->SetValueAsBool("bAttacking",true);
+				return EBTNodeResult::Succeeded;
+			}
 		}
 	}
 	return EBTNodeResult::Failed;

@@ -20,7 +20,7 @@ EBTNodeResult::Type UBTTask_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	{
 		return EBTNodeResult::Failed;
 	}
-	if (BlackboardComp->GetValueAsObject("PlayerCharacter"))
+	if (BlackboardComp->GetValueAsObject("PlayerCharacter") && !BlackboardComp->GetValueAsBool("bAttacking"))
 	{
 		Enemy = Cast<ACPP_EnemyBase>(AIController->GetPawn());
 		if (Enemy)
@@ -31,7 +31,8 @@ EBTNodeResult::Type UBTTask_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 			FAIMoveRequest MoveReq(PlayerCharacter->GetActorLocation());
 			MoveReq.SetAcceptanceRadius(5.f);
 			FPathFollowingRequestResult MoveResult = AIController->MoveTo(MoveReq);
-			if (MoveResult.Code == EPathFollowingRequestResult::AlreadyAtGoal)
+			//if (MoveResult.Code == EPathFollowingRequestResult::AlreadyAtGoal)
+			if (BlackboardComp->GetValueAsBool("CanAttack"))
 			{
 				return EBTNodeResult::Succeeded;
 			}

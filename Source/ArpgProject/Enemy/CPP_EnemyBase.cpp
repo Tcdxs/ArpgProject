@@ -5,6 +5,7 @@
 
 #include "CPP_EnemyAIController.h"
 #include "EnemyPawnSensingComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 
@@ -17,12 +18,12 @@ ACPP_EnemyBase::ACPP_EnemyBase()
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	
 	
-	CollisionComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CollisionComponent"));
-	check(CollisionComponent); //伤害判定碰撞体
-	CollisionComponent->SetupAttachment(RootComponent);
-	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	CollisionComponent->SetCollisionResponseToChannels(ECR_Ignore);
-	CollisionComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	AttackCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("AttackCollisionComponent"));
+	check(AttackCollisionComponent); //伤害判定碰撞体
+	AttackCollisionComponent->SetupAttachment(RootComponent);
+	AttackCollisionComponent->SetCollisionResponseToChannels(ECR_Ignore);
+	AttackCollisionComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	AttackCollisionComponent->SetBoxExtent(FVector(AttackCollisionX, AttackCollisionY, AttackCollisionZ));
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComponent"));
 	check(WidgetComponent); //UI
@@ -36,6 +37,7 @@ ACPP_EnemyBase::ACPP_EnemyBase()
 
 	EnemyState = EEnemyState::EES_Idle;
 	HP = MaxHP;
+
 }
 
 void ACPP_EnemyBase::BeginPlay()
@@ -47,6 +49,34 @@ void ACPP_EnemyBase::BeginPlay()
 		WidgetComponent->SetVisibility(false);
 	}
 	
+	AttackCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ACPP_EnemyBase::OnBoxBeginOverlap);
+	AttackCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &ACPP_EnemyBase::OnBoxEndOverlap);
+}
+
+void ACPP_EnemyBase::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
+	if (PlayerCharacter && OtherComp)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("1"));
+		CanAttack = true;
+		CPP_EnemyAIController = Cast<ACPP_EnemyAIController>(GetController());
+		CPP_EnemyAIController->GetBlackboardComponent()->SetValueAsBool("CanAttack", CanAttack);
+	}
+}
+
+void ACPP_EnemyBase::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
+	if (PlayerCharacter && OtherComp)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("2"));
+		CanAttack = false;
+		CPP_EnemyAIController = Cast<ACPP_EnemyAIController>(GetController());
+		CPP_EnemyAIController->GetBlackboardComponent()->SetValueAsBool("CanAttack", CanAttack);
+	}
 }
 
 void ACPP_EnemyBase::Tick(float DeltaTime)

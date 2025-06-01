@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "CPP_EnemyAIController.h"
+#include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
+#include "Components/BoxComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
 #include "PatrolPoints/PatrolPoint.h"
@@ -33,6 +35,8 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	APlayerCharacter* PlayerCharacter;
+	
 	UPROPERTY(VisibleAnywhere)
 	EEnemyState EnemyState;
 
@@ -45,8 +49,15 @@ public:
 private:
 	friend class UEnemyPawnSensingComponent;
 
-	UPROPERTY(EditAnywhere,Category="EnemyMesh")
-	TObjectPtr<UCapsuleComponent> CollisionComponent;
+	UPROPERTY(EditAnywhere,Category="EnemyAttackCollision")
+	TObjectPtr<UBoxComponent> AttackCollisionComponent;
+
+	UPROPERTY(EditAnywhere,Category="EnemyAttackCollision")
+	float AttackCollisionX = 150.f;
+	UPROPERTY(EditAnywhere,Category="EnemyAttackCollision")
+	float AttackCollisionY = 150.f;
+	UPROPERTY(EditAnywhere,Category="EnemyAttackCollision")
+	float AttackCollisionZ = 88.f;
 
 	UPROPERTY(EditAnywhere,Category="Widget")
 	TObjectPtr<UWidgetComponent> WidgetComponent;
@@ -62,8 +73,20 @@ private:
 
 	UPROPERTY(EditAnywhere,Category="Attribute")
 	float MaxHP = 100.f;
+
+	UPROPERTY(VisibleAnywhere,Category="Attack")
+	bool CanAttack = false;
+
+	UPROPERTY(VisibleAnywhere,Category="Attack")
+	bool bAttacking = false;
 protected:
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	virtual void OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	virtual void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 public:	
 
