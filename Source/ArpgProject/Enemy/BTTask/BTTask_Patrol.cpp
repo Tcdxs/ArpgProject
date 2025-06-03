@@ -29,7 +29,7 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 			const TArray<APatrolPoint*>& Spheres = Enemy->GetPatrolSpheres();
 			if (Spheres.Num() == 0) return EBTNodeResult::Failed;
 			CurrentPatrolIndex = BlackboardComp->GetValueAsInt("CurrentPatrolIndex");
-			IsWait = BlackboardComp->GetValueAsBool("ShouldWait");
+			IsWait = BlackboardComp->GetValueAsBool("IsWait");
 			if (!IsWait)
 			{
 				FVector NextLocation = Spheres[CurrentPatrolIndex]->GetActorLocation();
