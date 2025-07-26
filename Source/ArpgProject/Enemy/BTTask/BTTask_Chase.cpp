@@ -5,6 +5,7 @@
 
 #include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 
 
@@ -25,7 +26,8 @@ EBTNodeResult::Type UBTTask_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 		Enemy = Cast<ACPP_EnemyBase>(AIController->GetPawn());
 		if (Enemy)
 		{
-			Enemy->EnemyState = EEnemyState::EES_Chase; 
+			Enemy->EnemyState = EEnemyState::EES_Chase;
+			Enemy->GetCharacterMovement()->MaxWalkSpeed = 500.f;
 			BlackboardComp->SetValueAsBool("IsWait", false);
 			APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(BlackboardComp->GetValueAsObject("PlayerCharacter"));
 			FAIMoveRequest MoveReq(PlayerCharacter->GetActorLocation());

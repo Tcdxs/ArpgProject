@@ -47,10 +47,15 @@ public:
 	const TArray<APatrolPoint*>& GetPatrolSpheres() const { return PatrolPoint; }
 	
 private:
+	
+protected:
 	friend class UEnemyPawnSensingComponent;
 
+	UPROPERTY(EditAnywhere, Category="Weapon")
+	TObjectPtr<UStaticMeshComponent> WeaponMesh;
+	
 	UPROPERTY(EditAnywhere,Category="EnemyAttackCollision")
-	TObjectPtr<UBoxComponent> AttackCollisionComponent;
+	TObjectPtr<UBoxComponent> ToAttackCollisionComponent;
 
 	UPROPERTY(EditAnywhere,Category="EnemyAttackCollision")
 	float AttackCollisionX = 150.f;
@@ -58,6 +63,9 @@ private:
 	float AttackCollisionY = 150.f;
 	UPROPERTY(EditAnywhere,Category="EnemyAttackCollision")
 	float AttackCollisionZ = 88.f;
+
+	UPROPERTY(EditAnywhere,Category="EnemyAttackCollision")
+	TObjectPtr<UBoxComponent> AttackCollisionComponent;
 
 	UPROPERTY(EditAnywhere,Category="Widget")
 	TObjectPtr<UWidgetComponent> WidgetComponent;
@@ -72,22 +80,36 @@ private:
 	float HP;
 
 	UPROPERTY(EditAnywhere,Category="Attribute")
-	float MaxHP = 100.f;
+	float MaxHP;
 
+	UPROPERTY(EditAnywhere,Category="Attack")
+	float Damage;
+	
 	UPROPERTY(VisibleAnywhere,Category="Attack")
 	bool CanAttack = false;
 
 	UPROPERTY(VisibleAnywhere,Category="Attack")
 	bool bAttacking = false;
-protected:
+	
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
-	virtual void OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	virtual void OnToAttackBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-	virtual void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	virtual void OnToAttackBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UFUNCTION()
+	virtual void OnAttackBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	virtual void OnAttackBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION()
+	virtual void HandleDeath();  //死亡事件
+
+	UFUNCTION()
+	virtual void PerformAttack(); //攻击
 public:	
 
 	

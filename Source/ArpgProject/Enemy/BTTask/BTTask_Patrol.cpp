@@ -5,6 +5,7 @@
 
 #include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 
 
@@ -26,6 +27,7 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		if (Enemy)
 		{
 			Enemy->EnemyState = EEnemyState::EES_Patrol;
+			Enemy->GetCharacterMovement()->MaxWalkSpeed = 230.f;
 			const TArray<APatrolPoint*>& Spheres = Enemy->GetPatrolSpheres();
 			if (Spheres.Num() == 0) return EBTNodeResult::Failed;
 			CurrentPatrolIndex = BlackboardComp->GetValueAsInt("CurrentPatrolIndex");
@@ -34,16 +36,28 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 			{
 				FVector NextLocation = Spheres[CurrentPatrolIndex]->GetActorLocation();
 				BlackboardComp->SetValueAsVector("PatrolTarget", NextLocation);
+				/*
+				FRotator TargetRotation = (NextLocation - Enemy->GetActorLocation()).Rotation();
+				TargetRotation.Pitch = 0;
+				FRotator CurrentRotation = Enemy->GetActorRotation();
+				CurrentRotation.Pitch = 0;
+				FRotator NewRotation = FMath::RInterpTo(
+				   CurrentRotation,
+				   TargetRotation,
+				   OwnerComp.GetWorld()->GetDeltaSeconds(),
+				   1.0f);
+				Enemy->SetActorRotation(NewRotation);
+				*/
 				FAIMoveRequest MoveReq(NextLocation);
 				MoveReq.SetAcceptanceRadius(5.f);
 				FPathFollowingRequestResult MoveResult = AIController->MoveTo(MoveReq);
 				if (MoveResult.Code == EPathFollowingRequestResult::AlreadyAtGoal)
-				{
-					CurrentPatrolIndex = (CurrentPatrolIndex + 1) % Spheres.Num();
-					BlackboardComp->SetValueAsBool("IsWait", true);
-					BlackboardComp->SetValueAsInt("CurrentPatrolIndex", CurrentPatrolIndex);
-					return EBTNodeResult::Succeeded;
-				}
+					{
+						CurrentPatrolIndex = (CurrentPatrolIndex + 1) % Spheres.Num();
+						BlackboardComp->SetValueAsBool("IsWait", true);
+						BlackboardComp->SetValueAsInt("CurrentPatrolIndex", CurrentPatrolIndex);
+						return EBTNodeResult::Succeeded;
+					}
 			}
 		}
 	}

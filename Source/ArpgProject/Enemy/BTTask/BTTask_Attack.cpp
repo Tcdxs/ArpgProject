@@ -8,6 +8,10 @@
 #include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
+UBTTask_Attack::UBTTask_Attack()
+{
+	bNotifyTaskFinished = true;
+}
 
 EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -28,13 +32,14 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		{
 			if (BlackboardComp->GetValueAsBool("CanAttack") && !BlackboardComp->GetValueAsBool("bAttacking"))
 			{
+				AIController->StopMovement();
 				Enemy->EnemyState = EEnemyState::EES_Attack;
 				APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(BlackboardComp->GetValueAsObject("PlayerCharacter"));
-				AIController->StopMovement();
 				BlackboardComp->SetValueAsBool("bAttacking",true);
 				return EBTNodeResult::Succeeded;
 			}
 		}
 	}
+	UE_LOG(LogTemp,Warning,TEXT("1111"))
 	return EBTNodeResult::Failed;
 }

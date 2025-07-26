@@ -40,8 +40,8 @@ void UEnemyPawnSensingComponent::BeginPlay()
 void UEnemyPawnSensingComponent::OnSeePawn(APawn* Pawn)
 {
 	if (Enemy == nullptr || Enemy->GetController() == nullptr) return;
-	UE_LOG(LogTemp, Warning, TEXT("敌人看见了玩家：%s"), *Pawn->GetName());
 	FindingCharacter = Cast<APlayerCharacter>(Pawn);
+	UE_LOG(LogTemp, Warning, TEXT("敌人看见了玩家：%s"), *FindingCharacter->GetName());
 	CPP_EnemyAIController->GetBlackboardComponent()->SetValueAsObject("PlayerCharacter", FindingCharacter);
 	GetWorld()->GetTimerManager().SetTimer(
 	   SightLostTimerHandle, 
