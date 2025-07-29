@@ -27,7 +27,6 @@ ACPP_EnemyBase::ACPP_EnemyBase()
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
 	check(WeaponMesh);
-	//if (GetMesh()->DoesSocketExist(TEXT("WeaponSocket")))
 	WeaponMesh->SetupAttachment(GetMesh(),FName(TEXT("WeaponSocket")));
 
 	AttackCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("AttackCollisionComponent"));
@@ -35,6 +34,9 @@ ACPP_EnemyBase::ACPP_EnemyBase()
 	AttackCollisionComponent->SetupAttachment(WeaponMesh);
 	AttackCollisionComponent->SetCollisionResponseToChannels(ECR_Ignore);
 	AttackCollisionComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	AttackCollisionComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+	AttackCollisionComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+	AttackCollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComponent"));
 	check(WidgetComponent); //UI
@@ -50,6 +52,11 @@ ACPP_EnemyBase::ACPP_EnemyBase()
 	EnemyState = EEnemyState::EES_Idle;
 	HP = MaxHP;
 
+}
+
+void ACPP_EnemyBase::EnableAttackCollision(bool bEnable)
+{
+	AttackCollisionComponent->SetCollisionEnabled(bEnable ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
 }
 
 void ACPP_EnemyBase::BeginPlay()
@@ -101,13 +108,21 @@ void ACPP_EnemyBase::OnToAttackBoxEndOverlap(UPrimitiveComponent* OverlappedComp
 void ACPP_EnemyBase::OnAttackBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	
+	if (OtherActor == this)return;
+	if (OtherActor == PlayerCharacter && OtherComp)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("EnableAttackCollision 111111111111"))
+	}
 }
 
 void ACPP_EnemyBase::OnAttackBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	
+	if (OtherActor == this)return;
+	if (OtherActor == PlayerCharacter && OtherComp)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("disEnableAttackCollision 222222222222"))
+	}
 }
 
 void ACPP_EnemyBase::HandleDeath()

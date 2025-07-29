@@ -45,7 +45,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="AI Patrol")
 	const TArray<APatrolPoint*>& GetPatrolSpheres() const { return PatrolPoint; }
-	
+
+	UFUNCTION()
+	void EnableAttackCollision(bool bEnable);
 private:
 	
 protected:
