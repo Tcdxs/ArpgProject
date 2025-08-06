@@ -130,7 +130,7 @@ void ACPP_EnemyBase::HandleDeath()
 	
 }
 
-void ACPP_EnemyBase::PerformAttack()
+void ACPP_EnemyBase::BeAttacked()
 {
 	
 }

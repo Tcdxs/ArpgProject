@@ -111,7 +111,7 @@ protected:
 	virtual void HandleDeath();  //死亡事件
 
 	UFUNCTION()
-	virtual void PerformAttack(); //攻击
+	virtual void BeAttacked(); //被攻击
 public:	
 
 	
