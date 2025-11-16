@@ -64,6 +64,12 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	{
 		EnhancedInputComponent->BindAction(LookAction,ETriggerEvent::Triggered,this,&APlayerCharacter::Look);
 	}
+
+	if (JumpAction)
+	{
+		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Started,this,&APlayerCharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Completed,this,&APlayerCharacter::StopJumping);
+	}
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -95,6 +101,18 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X * LookSensitivity);
 		AddControllerPitchInput(LookAxisVector.Y * LookSensitivity);
 	}
+}
+
+void APlayerCharacter::Jump(const FInputActionValue& Value)
+{
+		ACharacter::Jump();
+	
+}
+
+void APlayerCharacter::StopJumping(const FInputActionValue& Value)
+{
+		ACharacter::StopJumping();
+	
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
