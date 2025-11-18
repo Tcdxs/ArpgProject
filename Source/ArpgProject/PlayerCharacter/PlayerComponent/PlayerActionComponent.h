@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ActionData/PrimaryActionData.h"
 #include "Components/ActorComponent.h"
 #include "PlayerActionComponent.generated.h"
 
@@ -12,17 +13,36 @@ class ARPGPROJECT_API UPlayerActionComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+	
+	/*					variable			 	*/
+
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category= "DataAsset")
+	UPrimaryActionData* Test;
+
+	int32 ActionPriority;
+	int32 PreviousActionPriority = 2;
+protected:
+
+
+private:
+
+
+	/*					function				*/
+
+	
 public:	
-	// Sets default values for this component's properties
 	UPlayerActionComponent();
 
+	void TriggerAction(UPrimaryActionData* ActionAsset);
+	
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+private:
 
 		
 	
