@@ -19,6 +19,14 @@ enum  class ELocomotionDirection:uint8
 	LeftBackward,
 	RightBackward
 };
+
+UENUM(BlueprintType)
+enum  class EMoveStyle:uint8
+{
+	Walk,
+	Run,
+	Sprint,
+};
 /**
  * 
  */
@@ -43,9 +51,15 @@ class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
 	FVector Velocity;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
+	FVector Velocity2D;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
 	FVector Acceleration;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
+	FVector Acceleration2D;
 	
     UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
 	float MaxWalkSpeed;
@@ -71,8 +85,14 @@ class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
 	ELocomotionDirection LocomotionDirection = ELocomotionDirection::Forward;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Movement")
+	EMoveStyle MoveStyle = EMoveStyle::Walk;
+
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
 	bool bTurnLeft = false;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Movement")
+	bool bLockOn;
 
 
 	private:

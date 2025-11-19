@@ -72,10 +72,10 @@ void UAnimInstance_V::GetAccelerationAndVelocity(float DeltaTime)
 
 	
 	Velocity = Character->GetVelocity();
-	FVector Velocity2D = FVector(Velocity.X, Velocity.Y, 0.f);
+	Velocity2D = FVector(Velocity.X, Velocity.Y, 0.f);
 
 	Acceleration = MoveComp->GetCurrentAcceleration();
-	FVector Acceleration2D = FVector(Acceleration.X, Acceleration.Y, 0.f);
+	Acceleration2D = FVector(Acceleration.X, Acceleration.Y, 0.f);
 
 	bIsAccelerating = !Acceleration2D.IsNearlyZero(0.1f);
 
@@ -213,6 +213,8 @@ void UAnimInstance_V::CalculateVelocityDirection(float Angle, ELocomotionDirecti
 
 	
 	OutDirection = ELocomotionDirection::Forward;
+	
+
 }
 
 
