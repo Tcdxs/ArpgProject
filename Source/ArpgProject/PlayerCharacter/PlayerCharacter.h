@@ -15,9 +15,8 @@ class ARPGPROJECT_API APlayerCharacter : public ACharacter, public II_DataTransf
 	GENERATED_BODY()
 
 /*			接口相关			*/
-public:
-	virtual UPrimaryActionData* GetPrimaryActionData_Test_Implementation() const override;
 
+	
 /*			 基础设置			*/
 public:
 	APlayerCharacter();
@@ -36,9 +35,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ActionComponents")
 	UPlayerActionComponent* PlayerActionComponent;
 
-
 	/*			数据资产库		*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category= "DataAsset")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
 	UPrimaryActionData* Test;
 	
 protected:
@@ -85,11 +83,11 @@ protected:
 	float LookSensitivity = 1.0f;		//视角灵敏度
 
 	//输入处理函数
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void Jump(const FInputActionValue& Value);
-	void StopJumping(const FInputActionValue& Value);
-	void Attack (const FInputActionValue& Value);
+	void A_Move(const FInputActionValue& Value);
+	void A_Look(const FInputActionValue& Value);
+	void A_Jump(const FInputActionValue& Value);
+	void A_StopJumping(const FInputActionValue& Value);
+	void A_Attack (const FInputActionValue& Value);
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
