@@ -23,11 +23,16 @@ public:
 
 public:
 
-	int32 ActionPriority;
-	int32 PreviousActionPriority = 2;
 protected:
+	int32 LightComboNumber = 0;
+	int32 HeavyComboNumber = 0;
+	int32 ActionPriority = 3;
+	int32 PreviousActionPriority = 3;
 
-
+	FVector WarpLocation;
+	FRotator WarpRotation;
+	FVector WarpLocation_Final;
+	FRotator WarpRotation_Final;
 private:
 
 
@@ -36,16 +41,24 @@ private:
 	
 public:	
 	UPlayerActionComponent();
-
-	void TriggerAction(UPrimaryActionData* ActionAsset);
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 protected:
 	virtual void BeginPlay() override;
+	
+	void TriggerAction(UPrimaryActionData* ActionAsset);
+
+	void CE_PlayMontage(FVector WarpLocation, FRotator WarpRotation, bool UseWarping);
+
+	void SetPriority(int32 PriorityIndex);
+
+	void ResetComboNumber();
+	
 
 private:
 
 		
 	
 };
+

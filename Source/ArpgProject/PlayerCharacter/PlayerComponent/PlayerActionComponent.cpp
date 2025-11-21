@@ -15,7 +15,6 @@ UPlayerActionComponent::UPlayerActionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	ActionPriority = 3;
 }
 
 
@@ -53,11 +52,11 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset)
 			switch (ActionDataAsset->ActionType)
 			{
 				case EActionType::CanCombo:
-	
+					SetPriority(1);
 					return;
 				
 				case EActionType::NoAction:
-
+					SetPriority(2);
 					return;
 				
 				case EActionType::Attack:
@@ -67,7 +66,7 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset)
 							return;
 						
 						case EHitDetectType::Sword:
-
+						
 							return;
 						
 						case EHitDetectType::Spear:
@@ -123,11 +122,58 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset)
 		
 		case EOwnerType::Max:
 			return;
-		
+	}
+
+	/*				DataTransferAndSettingArea				*/
+
+
+
+
+	/*					DetectArea					*/
+	
+	if (ActionDataAsset->PlayerUseMotionWarping)
+	{
+		switch (ActionDataAsset->WhichMotionWarpingPlayerUsed)
+		{
+		case EWhichMotionWarping::OnGroundCombo:
+
+			return;
+		case EWhichMotionWarping::OnGroundDodge:
+
+			return;
+		case EWhichMotionWarping::Parry:
+
+			return;
+		case EWhichMotionWarping::NoWarping:
+
+			return;
+		case EWhichMotionWarping::Max:
+			return;
+		}
 	}
 
 	
+	/*					ExecutionArea					*/
+
+	CE_PlayMontage(WarpLocation, WarpRotation, ActionDataAsset->PlayerUseMotionWarping);
+}
+
+void UPlayerActionComponent::CE_PlayMontage(FVector F_WarpLocation, FRotator F_WarpRotation, bool UseWarping)
+{
+	WarpLocation_Final = F_WarpLocation;
+	WarpRotation_Final = F_WarpRotation;
+
+
+	/*				MotionWarpingArea				*/
 	
+	if (UseWarping)
+	{
+		
+	}
+	else
+	{
+		
+	}
 }
 
 
@@ -145,3 +191,15 @@ void UPlayerActionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 }
 
+
+inline void UPlayerActionComponent::SetPriority(int32 PriorityIndex)
+{
+	PreviousActionPriority = PriorityIndex;
+	
+}
+
+void UPlayerActionComponent::ResetComboNumber()
+{
+	LightComboNumber = 0;
+	HeavyComboNumber = 0;
+}
