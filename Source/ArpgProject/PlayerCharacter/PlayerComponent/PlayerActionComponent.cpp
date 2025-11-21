@@ -3,11 +3,16 @@
 
 #include "PlayerActionComponent.h"
 
+/*				接口实现				*/
+
+void UPlayerActionComponent::ToTriggerAction_Implementation(UPrimaryActionData* ActionDataAsset)
+{
+	TriggerAction(ActionDataAsset);
+}
+
 
 UPlayerActionComponent::UPlayerActionComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
 }
@@ -15,6 +20,7 @@ UPlayerActionComponent::UPlayerActionComponent()
 
 void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset)
 {
+	UE_LOG(LogTemp, Warning, TEXT("TriggerAction"));
 	if (ActionDataAsset == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("TriggerAction: ActionAsset is null!"));
@@ -42,19 +48,79 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset)
 	switch (ActionDataAsset->OwnerType)
 	{
 		case EOwnerType::Player:
+			UE_LOG(LogTemp, Warning, TEXT("TriggerAction: EOwnerType::Player"));
+			switch (ActionDataAsset->ActionType)
+			{
+				case EActionType::CanCombo:
+	
+					return;
+				
+				case EActionType::NoAction:
 
+					return;
+				
+				case EActionType::Attack:
+					switch (ActionDataAsset->AttackDectectType)
+					{
+						case EHitDetectType::None:
+							return;
+						
+						case EHitDetectType::Sword:
+
+							return;
+						
+						case EHitDetectType::Spear:
+
+							return;
+						
+						case EHitDetectType::Dagger:
+
+							return;
+
+						case EHitDetectType::Max:
+
+							return;
+						
+					}
+					return;
+				
+				case EActionType::Dodge:
+
+					return;
+				
+				case EActionType::PerfectDodge:
+
+					return;
+				
+				case EActionType::Parry:
+
+					return;
+				
+				case EActionType::Skill:
+
+					return;
+				
+				case EActionType::Item:
+
+					return;
+				
+				case EActionType::Max:
+					return;
+			}
+			
 			return;
 		
 		case EOwnerType::Enemy:
-
+			UE_LOG(LogTemp, Warning, TEXT("TriggerAction: EOwnerType::Enemy"));
+		
 			return;
 		
 		case EOwnerType::Boss:
-
+			UE_LOG(LogTemp, Warning, TEXT("TriggerAction: EOwnerType::Boss"));
+		
 			return;
 		
 		case EOwnerType::Max:
-
 			return;
 		
 	}
