@@ -34,6 +34,7 @@ enum class EComboNumber: uint8
 UENUM(BlueprintType)
 enum class EHitDetectType: uint8
 {
+	None UMETA(DisplayName = "None"),
 	Sword UMETA(DisplayName = "Sword"),
 	Spear UMETA(DisplayName = "Spear"),
 	Dagger UMETA(DisplayName = "Dagger"),

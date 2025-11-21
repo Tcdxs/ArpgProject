@@ -6,16 +6,26 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+/*				接口实现				*/
+UPrimaryActionData* APlayerCharacter::GetPrimaryActionData_Test_Implementation() const
+{
+	return Test;
+}
+
+
+
 APlayerCharacter::APlayerCharacter()
 {
  	
 	PrimaryActorTick.bCanEverTick = true;
 
+	/*			移动相关设置			*/
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 600.0f;
 	GetCharacterMovement()->AirControl = 0.2f;
-	
+
+	/*			摄像机相关设置			*/
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 600.f;
@@ -24,13 +34,16 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 
+	/*			Action组件相关设置			*/
+	PlayerActionComponent = CreateDefaultSubobject<UPlayerActionComponent>(TEXT("PlayerActionComponent"));
+	if (PlayerActionComponent) PlayerActionComponent->SetComponentTickEnabled(true);
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//增强输入组件设置
+	/*				增强输入组件设置				*/
 	APlayerController* PlayerController = Cast<APlayerController>(Controller);
 	if (PlayerController)
 	{
@@ -42,6 +55,8 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(InputMappingContext, 0);
 		}
 	}
+
+	
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -69,6 +84,10 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	{
 		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Started,this,&APlayerCharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Completed,this,&APlayerCharacter::StopJumping);
+	}
+	if (AttackAction)
+	{
+		EnhancedInputComponent->BindAction(AttackAction,ETriggerEvent::Started,this,&APlayerCharacter::Attack);
 	}
 }
 
@@ -105,14 +124,21 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::Jump(const FInputActionValue& Value)
 {
-		ACharacter::Jump();
+	/*			施工			*/
+	
+	ACharacter::Jump();
 	
 }
 
 void APlayerCharacter::StopJumping(const FInputActionValue& Value)
 {
-		ACharacter::StopJumping();
+	ACharacter::StopJumping();
 	
+}
+
+void APlayerCharacter::Attack(const FInputActionValue& Value)
+{
+	II_DataTransfer::Execute_ToTriggerAction(this,Test);
 }
 
 void APlayerCharacter::Tick(float DeltaTime)

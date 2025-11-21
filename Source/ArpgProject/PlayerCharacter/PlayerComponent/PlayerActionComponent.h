@@ -4,22 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "ActionData/PrimaryActionData.h"
+#include "ArpgProject/Interface/I_DataTransfer.h"
 #include "Components/ActorComponent.h"
 #include "PlayerActionComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class ARPGPROJECT_API UPlayerActionComponent : public UActorComponent
+class ARPGPROJECT_API UPlayerActionComponent : public UActorComponent, public II_DataTransfer
 {
 	GENERATED_BODY()
 
+	/*					接口相关					*/
+public:
+	virtual void ToTriggerAction_Implementation(UPrimaryActionData* ActionDataAsset) override;
 	
 	/*					variable			 	*/
 
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category= "DataAsset")
-	UPrimaryActionData* Test;
 
 	int32 ActionPriority;
 	int32 PreviousActionPriority = 2;
