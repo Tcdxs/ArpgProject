@@ -8,6 +8,7 @@
 void UPlayerActionComponent::ToTriggerAction_Implementation(UPrimaryActionData* ActionDataAsset)
 {
 	TriggerAction(ActionDataAsset);
+	UE_LOG(LogTemp, Warning, TEXT("TriggerAction"));
 }
 
 
@@ -15,6 +16,7 @@ UPlayerActionComponent::UPlayerActionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
+	ActionPriority = 3;
 }
 
 

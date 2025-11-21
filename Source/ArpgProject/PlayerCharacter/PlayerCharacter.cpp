@@ -7,10 +7,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 /*				接口实现				*/
-UPrimaryActionData* APlayerCharacter::GetPrimaryActionData_Test_Implementation() const
-{
-	return Test;
-}
 
 
 
@@ -72,26 +68,26 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	if (MoveAction)
 	{
-		EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&APlayerCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&APlayerCharacter::A_Move);
 	}
 	
 	if (LookAction)
 	{
-		EnhancedInputComponent->BindAction(LookAction,ETriggerEvent::Triggered,this,&APlayerCharacter::Look);
+		EnhancedInputComponent->BindAction(LookAction,ETriggerEvent::Triggered,this,&APlayerCharacter::A_Look);
 	}
 
 	if (JumpAction)
 	{
-		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Started,this,&APlayerCharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Completed,this,&APlayerCharacter::StopJumping);
+		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Started,this,&APlayerCharacter::A_Jump);
+		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Completed,this,&APlayerCharacter::A_StopJumping);
 	}
 	if (AttackAction)
 	{
-		EnhancedInputComponent->BindAction(AttackAction,ETriggerEvent::Started,this,&APlayerCharacter::Attack);
+		EnhancedInputComponent->BindAction(AttackAction,ETriggerEvent::Started,this,&APlayerCharacter::A_Attack);
 	}
 }
 
-void APlayerCharacter::Move(const FInputActionValue& Value)
+void APlayerCharacter::A_Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	if (Controller != nullptr)
@@ -110,7 +106,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 	}
 }
 
-void APlayerCharacter::Look(const FInputActionValue& Value)
+void APlayerCharacter::A_Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -122,7 +118,7 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void APlayerCharacter::Jump(const FInputActionValue& Value)
+void APlayerCharacter::A_Jump(const FInputActionValue& Value)
 {
 	/*			施工			*/
 	
@@ -130,15 +126,18 @@ void APlayerCharacter::Jump(const FInputActionValue& Value)
 	
 }
 
-void APlayerCharacter::StopJumping(const FInputActionValue& Value)
+void APlayerCharacter::A_StopJumping(const FInputActionValue& Value)
 {
 	ACharacter::StopJumping();
 	
 }
 
-void APlayerCharacter::Attack(const FInputActionValue& Value)
+void APlayerCharacter::A_Attack(const FInputActionValue& Value)
 {
-	II_DataTransfer::Execute_ToTriggerAction(this,Test);
+	if (Test != nullptr)
+	{
+		II_DataTransfer::Execute_ToTriggerAction(this,Test);
+	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
