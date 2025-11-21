@@ -94,8 +94,9 @@ class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Movement")
 	bool bLockOn = false;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Movement")
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Movement")
 	float SprintTimer = 0.f;
+	*/
 
 
 
@@ -113,7 +114,7 @@ class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance
 	float CalculateDirectionCustom(const FVector& InVelocity, const FRotator& BaseRotation);
 	void UpdateOrientData(float DeltaSeconds);
 	void CalculateVelocityDirection(float Angle, ELocomotionDirection& OutDirection);
-	void ChangeMoveStyle(float DeltaTime);
+	/*void ChangeMoveStyle(float DeltaTime);*/
 	
 	
 };

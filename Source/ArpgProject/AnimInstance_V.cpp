@@ -36,7 +36,7 @@ void UAnimInstance_V::NativeUpdateAnimation(float DeltaTime)
 	GetRotation(DeltaTime);
 	GetAccelerationAndVelocity(DeltaTime);
 	UpdateOrientData(DeltaTime);
-	ChangeMoveStyle(DeltaTime);
+	/*ChangeMoveStyle(DeltaTime);*/
 }
 
 
@@ -218,6 +218,7 @@ void UAnimInstance_V::CalculateVelocityDirection(float Angle, ELocomotionDirecti
 
 }
 
+/*
 void UAnimInstance_V::ChangeMoveStyle(float DeltaTime)
 {
 	if (!OwnerPawn) return;
@@ -245,6 +246,7 @@ void UAnimInstance_V::ChangeMoveStyle(float DeltaTime)
 		MaxWalkSpeed = 800.f;
 	}
 }
+*/
 
 
 
