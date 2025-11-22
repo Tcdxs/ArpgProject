@@ -35,6 +35,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ActionComponents")
 	UPlayerActionComponent* PlayerActionComponent;
 
+	
 	/*			数据资产库		*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
 	UPrimaryActionData* Test;
@@ -81,7 +82,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float LookSensitivity = 1.0f;		//视角灵敏度
-	
+
 	
 	//计时器【13】
 	bool bPressingW = false;      
@@ -97,9 +98,16 @@ protected:
 	void A_Attack (const FInputActionValue& Value);
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void SetJumpingRotationRate(float ZRotationRate = 1500.0f);
 
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void ResetRotationRate();
+	
 private:
-
+	// 存储默认旋转速率
+	FRotator DefaultRotationRate;
 	
 	/*					摄像机相关				*/
 public:

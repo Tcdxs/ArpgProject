@@ -21,6 +21,8 @@ APlayerCharacter::APlayerCharacter()
 	GetCharacterMovement()->JumpZVelocity = 600.0f;
 	GetCharacterMovement()->AirControl = 0.2f;
 
+	DefaultRotationRate = GetCharacterMovement()->RotationRate;
+
 	/*			摄像机相关设置			*/
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -89,6 +91,7 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	}
 }
 
+
 void APlayerCharacter::A_Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -146,7 +149,9 @@ void APlayerCharacter::A_Look(const FInputActionValue& Value)
 void APlayerCharacter::A_Jump(const FInputActionValue& Value)
 {
 	/*			施工			*/
-	
+	UAnimMontage* CurrentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+	if (CurrentMontage) StopAnimMontage(CurrentMontage);
+	SetJumpingRotationRate();
 	ACharacter::Jump();
 	
 }
@@ -185,4 +190,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 }
 
 
+void APlayerCharacter::SetJumpingRotationRate(float ZRotationRate)
+{
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f,ZRotationRate);
+}
+
+void APlayerCharacter::ResetRotationRate()
+{
+	GetCharacterMovement()->RotationRate = DefaultRotationRate;
+}
 
