@@ -39,7 +39,12 @@ public:
 	/*			数据资产库		*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
 	UPrimaryActionData* Test;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* NoAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* CanCombo;
 protected:
 
 	
@@ -93,8 +98,8 @@ protected:
 	void A_Move(const FInputActionValue& Value);
 	void A_StopMove(const FInputActionValue& Value);
 	void A_Look(const FInputActionValue& Value);
-	void A_Jump(const FInputActionValue& Value);
-	void A_StopJumping(const FInputActionValue& Value);
+	void A_JumpPressedStart(const FInputActionValue& Value);
+	void A_JumpPressedEnd(const FInputActionValue& Value);
 	void A_Attack (const FInputActionValue& Value);
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

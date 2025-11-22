@@ -20,20 +20,13 @@ UPlayerActionComponent::UPlayerActionComponent()
 
 void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset, EActionPriorityType ActionDataPriority)
 {
-	UE_LOG(LogTemp, Warning, TEXT("TriggerAction"));
-	if (ActionDataAsset == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("TriggerAction: ActionAsset is null!"));
-		return;
-	}
-
 	
 	/*								PriorityArea							*/
-
-	FString ActionName = ActionDataAsset->NameOfAction.ToString();
+	
 	EActionPriorityType Priority = ActionDataPriority;
 	ActionPriority = GetActionPrioritySelectionValue(Priority);
-	if (!(ActionPriority < PreviousActionPriority))
+	
+	if (!(ActionPriority < PreviousActionPriority)&&!ActionDataAsset)
 	{
 		if ((ActionDataAsset->ActionType != EActionType::NoAction)&&(ActionDataAsset->ActionType != EActionType::CanCombo))
 		{

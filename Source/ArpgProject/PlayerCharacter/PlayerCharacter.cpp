@@ -16,11 +16,12 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	/*			移动相关设置			*/
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); 
 	GetCharacterMovement()->JumpZVelocity = 600.0f;
 	GetCharacterMovement()->AirControl = 0.2f;
-
+	
 	DefaultRotationRate = GetCharacterMovement()->RotationRate;
 
 	/*			摄像机相关设置			*/
@@ -82,8 +83,8 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	if (JumpAction)
 	{
-		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Started,this,&APlayerCharacter::A_Jump);
-		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Completed,this,&APlayerCharacter::A_StopJumping);
+		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Started,this,&APlayerCharacter::A_JumpPressedStart);
+		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Completed,this,&APlayerCharacter::A_JumpPressedEnd);
 	}
 	if (AttackAction)
 	{
@@ -146,19 +147,16 @@ void APlayerCharacter::A_Look(const FInputActionValue& Value)
 	}
 }
 
-void APlayerCharacter::A_Jump(const FInputActionValue& Value)
+void APlayerCharacter::A_JumpPressedStart(const FInputActionValue& Value)
 {
-	/*			施工			*/
 	UAnimMontage* CurrentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 	if (CurrentMontage) StopAnimMontage(CurrentMontage);
-	SetJumpingRotationRate();
 	ACharacter::Jump();
-	
+	II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent, NoAction, EActionPriorityType::Max);
 }
 
-void APlayerCharacter::A_StopJumping(const FInputActionValue& Value)
+void APlayerCharacter::A_JumpPressedEnd(const FInputActionValue& Value)
 {
-	ACharacter::StopJumping();
 	
 }
 
@@ -192,7 +190,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 void APlayerCharacter::SetJumpingRotationRate(float ZRotationRate)
 {
-	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f,ZRotationRate);
+	GetCharacterMovement()->RotationRate = FRotator(0.f, ZRotationRate, 0.f);
 }
 
 void APlayerCharacter::ResetRotationRate()
