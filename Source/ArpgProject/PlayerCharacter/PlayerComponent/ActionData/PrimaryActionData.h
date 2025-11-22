@@ -26,9 +26,6 @@ public:
 	EOwnerType OwnerType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EActionPriorityType Priority;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EActionType ActionType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

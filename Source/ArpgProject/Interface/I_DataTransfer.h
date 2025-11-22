@@ -25,5 +25,5 @@ class ARPGPROJECT_API II_DataTransfer
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "TriggerAction")
-	void ToTriggerAction(UPrimaryActionData* ActionDataAsset);
+	void ToTriggerAction(UPrimaryActionData* ActionDataAsset,  EActionPriorityType ActionDataPriority);
 };

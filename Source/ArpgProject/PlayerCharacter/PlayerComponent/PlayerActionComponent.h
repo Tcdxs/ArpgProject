@@ -16,7 +16,7 @@ class ARPGPROJECT_API UPlayerActionComponent : public UActorComponent, public II
 
 	/*					接口相关					*/
 public:
-	virtual void ToTriggerAction_Implementation(UPrimaryActionData* ActionDataAsset) override;
+	virtual void ToTriggerAction_Implementation(UPrimaryActionData* ActionDataAsset,  EActionPriorityType ActionDataPriority) override;
 	
 	/*					variable			 	*/
 
@@ -47,7 +47,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-	void TriggerAction(UPrimaryActionData* ActionAsset);
+	void TriggerAction(UPrimaryActionData* ActionAsset,  EActionPriorityType ActionDataPriority);
 
 	void CE_PlayMontage(FVector WarpLocation, FRotator WarpRotation, bool UseWarping);
 

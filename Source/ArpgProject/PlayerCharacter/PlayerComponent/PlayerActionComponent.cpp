@@ -5,9 +5,9 @@
 
 /*				接口实现				*/
 
-void UPlayerActionComponent::ToTriggerAction_Implementation(UPrimaryActionData* ActionDataAsset)
+void UPlayerActionComponent::ToTriggerAction_Implementation(UPrimaryActionData* ActionDataAsset,  EActionPriorityType ActionDataPriority)
 {
-	TriggerAction(ActionDataAsset);
+	TriggerAction(ActionDataAsset,  ActionDataPriority);
 }
 
 
@@ -18,7 +18,7 @@ UPlayerActionComponent::UPlayerActionComponent()
 }
 
 
-void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset)
+void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset, EActionPriorityType ActionDataPriority)
 {
 	UE_LOG(LogTemp, Warning, TEXT("TriggerAction"));
 	if (ActionDataAsset == nullptr)
@@ -31,7 +31,7 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset)
 	/*								PriorityArea							*/
 
 	FString ActionName = ActionDataAsset->NameOfAction.ToString();
-	EActionPriorityType Priority = ActionDataAsset->Priority;
+	EActionPriorityType Priority = ActionDataPriority;
 	ActionPriority = GetActionPrioritySelectionValue(Priority);
 	if (!(ActionPriority < PreviousActionPriority))
 	{

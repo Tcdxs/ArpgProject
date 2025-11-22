@@ -166,7 +166,7 @@ void APlayerCharacter::A_Attack(const FInputActionValue& Value)
 {
 	if (Test != nullptr)
 	{
-		II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent,Test);
+		II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent, Test, EActionPriorityType::Max);
 	}
 }
 
