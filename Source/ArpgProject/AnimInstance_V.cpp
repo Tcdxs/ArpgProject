@@ -36,7 +36,7 @@ void UAnimInstance_V::NativeUpdateAnimation(float DeltaTime)
 	GetRotation(DeltaTime);
 	GetAccelerationAndVelocity(DeltaTime);
 	UpdateOrientData(DeltaTime);
-	/*ChangeMoveStyle(DeltaTime);*/
+	ChangeMoveStyle(DeltaTime);
 }
 
 
@@ -218,35 +218,23 @@ void UAnimInstance_V::CalculateVelocityDirection(float Angle, ELocomotionDirecti
 
 }
 
-/*
 void UAnimInstance_V::ChangeMoveStyle(float DeltaTime)
 {
 	if (!OwnerPawn) return;
 	
-	bool bAtMaxSpeed = Velocity2D.Size()>= MaxWalkSpeed - 5.f;
-	if (bAtMaxSpeed)
+	if (bLockOn == false)
 	{
-		SprintTimer += DeltaTime;
+		if (MaxWalkSpeed == 1000.f)
+		{
+			MoveStyle = EMoveStyle::Sprint;
+		}
+		else
+		{
+			MoveStyle = EMoveStyle::Run;
+		}
 	}
-	else
-	{
-		SprintTimer = 0.f;
-		MoveStyle = EMoveStyle::Walk;
-		MaxWalkSpeed = 800.f;
-		
-	}
-	if (SprintTimer >= 2.f)
-	{
-		MoveStyle = EMoveStyle::Sprint;
-		MaxWalkSpeed = 1000.f;
-	}
-	else
-	{
-		MoveStyle = EMoveStyle::Run;
-		MaxWalkSpeed = 800.f;
-	}
+	
 }
-*/
 
 
 
