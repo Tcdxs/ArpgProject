@@ -60,6 +60,8 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &APlayerCharacter::A_StopMove);
+
 	if (!EnhancedInputComponent)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("EnhancedInputComponent is nullptr"));
@@ -90,6 +92,23 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 void APlayerCharacter::A_Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
+	
+	//检测W是否按下
+	if (MovementVector.Y > 0.1f)
+	{
+		if (!bPressingW)
+		{
+			bPressingW = true;
+			WPressTimer = 0.0f;  
+		}
+	}
+	else
+	{
+		bPressingW = false;
+		WPressTimer = 0.0f;  
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed; 
+	}
+	
 	if (Controller != nullptr)
 	{
 		//获取控制器的旋转
@@ -104,6 +123,12 @@ void APlayerCharacter::A_Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection,MovementVector.Y);
 		AddMovementInput(RightDirection,MovementVector.X);
 	}
+}
+void APlayerCharacter::A_StopMove(const FInputActionValue& Value)
+{
+	bPressingW = false;
+	WPressTimer = 0.0f;
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
 void APlayerCharacter::A_Look(const FInputActionValue& Value)
@@ -143,6 +168,19 @@ void APlayerCharacter::A_Attack(const FInputActionValue& Value)
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (bPressingW)
+	{
+		WPressTimer += DeltaTime;
+
+		if (WPressTimer >= MaxSpeedDelay)
+		{
+			GetCharacterMovement()->MaxWalkSpeed = SprintSpeed; 
+		}
+		else
+		{
+			GetCharacterMovement()->MaxWalkSpeed = WalkSpeed; 
+		}
+	}
 
 }
 

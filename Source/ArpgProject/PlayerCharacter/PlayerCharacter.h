@@ -81,9 +81,16 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float LookSensitivity = 1.0f;		//视角灵敏度
+	
+	
+	//计时器【13】
+	bool bPressingW = false;      
+	float WPressTimer = 0.0f;
+	float MaxSpeedDelay = 5.0f;
 
 	//输入处理函数
 	void A_Move(const FInputActionValue& Value);
+	void A_StopMove(const FInputActionValue& Value);
 	void A_Look(const FInputActionValue& Value);
 	void A_Jump(const FInputActionValue& Value);
 	void A_StopJumping(const FInputActionValue& Value);
