@@ -96,6 +96,12 @@ protected:
 	bool bPressingW = false;      
 	float WPressTimer = 0.0f;
 	float MaxSpeedDelay = 5.0f;
+	
+	//动画传入的变量【13】
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Movement")
+	bool bCanJump_Test = false;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Movement")
+	bool bCanMove_Test = false;
 
 	//输入处理函数
 	void A_Move(const FInputActionValue& Value);
