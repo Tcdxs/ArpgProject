@@ -159,7 +159,6 @@ void APlayerCharacter::A_JumpPressedStart(const FInputActionValue& Value)
 	JumpPressed = true;
 	UAnimMontage* CurrentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 	if (CurrentMontage) StopAnimMontage(CurrentMontage);
-	ACharacter::Jump();
 	II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent, NoAction, EActionPriorityType::Max);
 }
 
