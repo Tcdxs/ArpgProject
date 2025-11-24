@@ -9,6 +9,12 @@
 /*				接口实现				*/
 
 
+bool APlayerCharacter::GetBoolValue_Implementation(const FString& Key) const
+{
+	if (Key == "JumpPressed") return JumpPressed;
+	
+	return false;
+}
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -149,6 +155,8 @@ void APlayerCharacter::A_Look(const FInputActionValue& Value)
 
 void APlayerCharacter::A_JumpPressedStart(const FInputActionValue& Value)
 {
+	bSpacePressed = true;
+	JumpPressed = true;
 	UAnimMontage* CurrentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 	if (CurrentMontage) StopAnimMontage(CurrentMontage);
 	ACharacter::Jump();
@@ -157,7 +165,7 @@ void APlayerCharacter::A_JumpPressedStart(const FInputActionValue& Value)
 
 void APlayerCharacter::A_JumpPressedEnd(const FInputActionValue& Value)
 {
-	
+	bSpacePressed = false;
 }
 
 void APlayerCharacter::A_Attack(const FInputActionValue& Value)

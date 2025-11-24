@@ -17,6 +17,7 @@ class ARPGPROJECT_API UPlayerActionComponent : public UActorComponent, public II
 	/*					接口相关					*/
 public:
 	virtual void ToTriggerAction_Implementation(UPrimaryActionData* ActionDataAsset,  EActionPriorityType ActionDataPriority) override;
+	virtual EMovementMode GetMovementModeValue_Implementation (const FString& Key) const override;
 	
 	/*					variable			 	*/
 
@@ -33,6 +34,8 @@ protected:
 	FRotator WarpRotation;
 	FVector WarpLocation_Final;
 	FRotator WarpRotation_Final;
+
+	TEnumAsByte<EMovementMode> PlayerMovementMode;
 private:
 
 

@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Interface/I_DataTransfer.h"
+#include "PlayerCharacter/PlayerCharacter.h"
 #include "AnimInstance_V.generated.h"
 
 UENUM(BlueprintType)
@@ -31,7 +33,7 @@ enum  class EMoveStyle:uint8
  * 
  */
 UCLASS()
-class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance
+class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance, public II_DataTransfer
 {
 	GENERATED_BODY()
 	
@@ -77,6 +79,9 @@ class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance
 	bool bIsFalling = false;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
+	bool JumpPressed = false;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
 	float LocomotionDirectionAccel = 0.0f;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Movement")
@@ -93,6 +98,9 @@ class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Movement")
 	bool bLockOn = false;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Movement")
+	TEnumAsByte<EMovementMode> PlayerMovementMode;
 	
 	
 
@@ -101,6 +109,8 @@ class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance
 	private:
 	UPROPERTY(Transient)
 	APawn* OwnerPawn;
+	APlayerCharacter* PlayerCharacter;
+	UPlayerActionComponent* PlayerActionComponent;
 
 	float PreviousActorYaw;
 
@@ -112,6 +122,9 @@ class ARPGPROJECT_API UAnimInstance_V : public UAnimInstance
 	void UpdateOrientData(float DeltaSeconds);
 	void CalculateVelocityDirection(float Angle, ELocomotionDirection& OutDirection);
 	void ChangeMoveStyle(float DeltaTime);
+
+	UPROPERTY()
+	TScriptInterface<II_DataTransfer> DataInterface;
 	
 	
 };

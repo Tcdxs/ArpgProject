@@ -26,4 +26,10 @@ class ARPGPROJECT_API II_DataTransfer
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "TriggerAction")
 	void ToTriggerAction(UPrimaryActionData* ActionDataAsset,  EActionPriorityType ActionDataPriority);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "bSpacePressed")
+	bool GetBoolValue (const FString& Key) const;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MovementMode")
+	EMovementMode GetMovementModeValue (const FString& Key) const;
 };

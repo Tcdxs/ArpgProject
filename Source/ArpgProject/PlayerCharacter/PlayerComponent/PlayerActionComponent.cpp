@@ -10,6 +10,15 @@ void UPlayerActionComponent::ToTriggerAction_Implementation(UPrimaryActionData* 
 	TriggerAction(ActionDataAsset,  ActionDataPriority);
 }
 
+EMovementMode UPlayerActionComponent::GetMovementModeValue_Implementation(const FString& Key) const
+{
+	if (Key == "PlayerMovementMode")
+	{
+		return PlayerMovementMode;
+	}
+	return MOVE_None;
+}
+
 
 UPlayerActionComponent::UPlayerActionComponent()
 {

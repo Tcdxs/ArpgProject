@@ -15,12 +15,15 @@ class ARPGPROJECT_API APlayerCharacter : public ACharacter, public II_DataTransf
 	GENERATED_BODY()
 
 /*			接口相关			*/
+	
+	virtual bool GetBoolValue_Implementation(const FString& Key) const override;
 
 	
 /*			 基础设置			*/
 public:
 	APlayerCharacter();
 	virtual void Tick(float DeltaTime) override;
+
 
 	
 protected:
@@ -37,6 +40,7 @@ public:
 
 	
 	/*			数据资产库		*/
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
 	UPrimaryActionData* Test;
 
@@ -54,7 +58,6 @@ private:
 	/*						增强输入组件							*/
 	
 public:
-	
 	
 protected:
 	// 增强输入组件
@@ -113,6 +116,8 @@ protected:
 private:
 	// 存储默认旋转速率
 	FRotator DefaultRotationRate;
+	bool bSpacePressed = false;
+	bool JumpPressed = false;
 	
 	/*					摄像机相关				*/
 public:

@@ -4,10 +4,7 @@
 #include "AnimInstance_V.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
-
-
-
-
+#include "PlayerCharacter/PlayerCharacter.h"
 
 
 void UAnimInstance_V::NativeInitializeAnimation()
@@ -15,6 +12,9 @@ void UAnimInstance_V::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 
 	OwnerPawn = TryGetPawnOwner();
+	if (!OwnerPawn) return;
+	if (!PlayerCharacter) PlayerCharacter = Cast<APlayerCharacter>(OwnerPawn);
+	if (!PlayerActionComponent) PlayerActionComponent = OwnerPawn->FindComponentByClass<UPlayerActionComponent>();
 
 	if (OwnerPawn)
 	{
@@ -37,8 +37,16 @@ void UAnimInstance_V::NativeUpdateAnimation(float DeltaTime)
 	GetAccelerationAndVelocity(DeltaTime);
 	UpdateOrientData(DeltaTime);
 	ChangeMoveStyle(DeltaTime);
-}
 
+		if (PlayerCharacter)
+		{
+			JumpPressed = II_DataTransfer::Execute_GetBoolValue(PlayerCharacter, "JumpPressed");
+		}
+		if (PlayerActionComponent)
+		{
+			PlayerMovementMode = II_DataTransfer::Execute_GetMovementModeValue(PlayerActionComponent, "PlayerMovementMode");
+		}
+}
 
 void UAnimInstance_V::GetRotation(float DeltaTimes)
 {
