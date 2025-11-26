@@ -156,7 +156,7 @@ void APlayerCharacter::A_Look(const FInputActionValue& Value)
 void APlayerCharacter::A_JumpPressedStart(const FInputActionValue& Value)
 {
 	bSpacePressed = true;
-	JumpPressed = true;
+	JumpPressed = true; 
 	UAnimMontage* CurrentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 	if (CurrentMontage) StopAnimMontage(CurrentMontage);
 	II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent, NoAction, EActionPriorityType::Max);
