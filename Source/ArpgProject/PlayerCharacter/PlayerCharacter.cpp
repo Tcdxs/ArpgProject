@@ -16,6 +16,11 @@ bool APlayerCharacter::GetBoolValue_Implementation(const FString& Key) const
 	return false;
 }
 
+void APlayerCharacter::ToTriggerAction_Jump_Implementation()
+{
+		UE_LOG(LogTemp, Warning, TEXT("Jump Start"));
+}
+
 APlayerCharacter::APlayerCharacter()
 {
  	

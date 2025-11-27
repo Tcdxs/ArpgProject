@@ -17,6 +17,8 @@ class ARPGPROJECT_API APlayerCharacter : public ACharacter, public II_DataTransf
 /*			接口相关			*/
 	
 	virtual bool GetBoolValue_Implementation(const FString& Key) const override;
+	
+	virtual void ToTriggerAction_Jump_Implementation() override;
 
 	
 /*			 基础设置			*/
