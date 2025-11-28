@@ -3,6 +3,7 @@
 
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "ArpgProject/Interface/I_DataTransfer.h"
@@ -23,16 +24,22 @@ public:
 
 	UFUNCTION()
 	virtual void Jump_End_Implementation() override;
+
 	
 /*			 基础设置			*/
 public:
 	APlayerCharacter();
 	virtual void Tick(float DeltaTime) override;
 
-
+	
+	UPROPERTY(BlueprintReadWrite, Category = "Weapon")
+	EHitDetectType AttackDetectType = EHitDetectType::Sword;
 	
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Tags")
+	EOwnerType OwnerType = EOwnerType::Player;
 
 private:
 

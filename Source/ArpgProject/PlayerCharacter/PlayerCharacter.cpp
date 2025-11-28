@@ -29,12 +29,11 @@ void APlayerCharacter::Jump_End_Implementation()
 	StopJumping();
 }
 
-
 APlayerCharacter::APlayerCharacter()
 {
  	
 	PrimaryActorTick.bCanEverTick = true;
-
+	
 	/*			移动相关设置			*/
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
@@ -173,7 +172,7 @@ void APlayerCharacter::A_JumpPressedStart(const FInputActionValue& Value)
 	JumpPressed = true;
 	UAnimMontage* CurrentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 	if (CurrentMontage) StopAnimMontage(CurrentMontage);
-	II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent, NoAction, EActionPriorityType::Max);
+	II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent, EActionType::NoAction, EActionPriorityType::Max);
 }
 
 void APlayerCharacter::A_JumpPressedEnd(const FInputActionValue& Value)
@@ -185,7 +184,7 @@ void APlayerCharacter::A_Attack(const FInputActionValue& Value)
 {
 	if (Test != nullptr)
 	{
-		II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent, Test, EActionPriorityType::Max);
+		II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent, EActionType::Attack, EActionPriorityType::Low);
 	}
 }
 
@@ -219,4 +218,3 @@ void APlayerCharacter::ResetRotationRate()
 {
 	GetCharacterMovement()->RotationRate = DefaultRotationRate;
 }
-

@@ -29,7 +29,7 @@ public:
 	EActionType ActionType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EHitDetectType AttackDectectType;
+	EHitDetectType AttackDetectType;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EAttackType AttackType;

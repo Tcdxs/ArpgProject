@@ -3,11 +3,14 @@
 
 #include "PlayerActionComponent.h"
 
+#include "ArpgProject/NCPP_Enemy/NCPP_Enemy.h"
+#include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
+
 /*				接口实现				*/
 
-void UPlayerActionComponent::ToTriggerAction_Implementation(UPrimaryActionData* ActionDataAsset,  EActionPriorityType ActionDataPriority)
+void UPlayerActionComponent::ToTriggerAction_Implementation(const EActionType ActionType,  EActionPriorityType ActionDataPriority)
 {
-	TriggerAction(ActionDataAsset,  ActionDataPriority);
+	TriggerAction(ActionType,  ActionDataPriority);
 }
 
 EMovementMode UPlayerActionComponent::GetMovementModeValue_Implementation(const FString& Key) const
@@ -24,10 +27,33 @@ UPlayerActionComponent::UPlayerActionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
+	
+	/*					身份识别					*/
+
+	APlayerCharacter* Type_Player = Cast<APlayerCharacter>(GetOwner());
+	if (Type_Player)
+	{
+		OwnerType = EOwnerType::Player;
+		AttackDetectType = Type_Player->AttackDetectType;
+	}
+	else
+	{
+		ANCPP_Enemy* Type_Enemy = Cast<ANCPP_Enemy>(GetOwner());
+		if (Type_Enemy)
+		{
+			OwnerType = EOwnerType::Enemy;
+			AttackDetectType = EHitDetectType::None;
+		}
+		else
+		{
+			OwnerType = EOwnerType::Boss;
+			AttackDetectType = EHitDetectType::None;
+		}
+	}
 }
 
 
-void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset, EActionPriorityType ActionDataPriority)
+void UPlayerActionComponent::TriggerAction(EActionType ActionType, EActionPriorityType ActionDataPriority)
 {
 	
 	/*								PriorityArea							*/
@@ -35,10 +61,11 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset, 
 	EActionPriorityType Priority = ActionDataPriority;
 	ActionPriority = GetActionPrioritySelectionValue(Priority);
 	
-	if (!(ActionPriority < PreviousActionPriority)&&!ActionDataAsset)
+	if (ActionPriority >= PreviousActionPriority)
 	{
-		if ((ActionDataAsset->ActionType != EActionType::NoAction)&&(ActionDataAsset->ActionType != EActionType::CanCombo))
+		if ((ActionType != EActionType::NoAction)&&(ActionType != EActionType::CanCombo))
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Return"));
 			return;
 		}
 	}
@@ -47,11 +74,11 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset, 
 	
 	/*						ActionSelectionLibraryArea						*/
 
-	switch (ActionDataAsset->OwnerType)
+	switch (OwnerType)
 	{
 		case EOwnerType::Player:
 			UE_LOG(LogTemp, Warning, TEXT("TriggerAction: EOwnerType::Player"));
-			switch (ActionDataAsset->ActionType)
+			switch (ActionType)
 			{
 				case EActionType::CanCombo:
 					SetPriority(1);
@@ -62,7 +89,7 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset, 
 					return;
 				
 				case EActionType::Attack:
-					switch (ActionDataAsset->AttackDectectType)
+					switch (AttackDetectType)
 					{
 						case EHitDetectType::None:
 							return;
@@ -155,6 +182,11 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset, 
 			return;
 	}
 
+	if (ActionDataAsset == nullptr)  // 防止空指针报错
+	{
+		UE_LOG(LogTemp, Error, TEXT("ActionDataAsset Is Nullptr"));
+		return;
+	}
 	/*				DataTransferAndSettingArea				*/
 
 
