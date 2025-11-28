@@ -68,7 +68,36 @@ void UPlayerActionComponent::TriggerAction(UPrimaryActionData* ActionDataAsset, 
 							return;
 						
 						case EHitDetectType::Sword:
-						
+							switch (LightComboNumber)
+							{
+								case EComboNumber::One:
+
+									LightComboNumber = EComboNumber::Two;
+									return;
+								
+								case EComboNumber::Two:
+
+									LightComboNumber = EComboNumber::Three;
+									return;
+								
+								case EComboNumber::Three:
+
+									LightComboNumber = EComboNumber::Four;
+									return;
+								
+								case EComboNumber::Four:
+
+									LightComboNumber = EComboNumber::Five;
+									return;
+								
+								case EComboNumber::Five:
+
+									LightComboNumber = EComboNumber::One;
+									return;
+
+								case EComboNumber::Max:
+									return;
+							}
 							return;
 						
 						case EHitDetectType::Spear:
@@ -202,6 +231,6 @@ inline void UPlayerActionComponent::SetPriority(int32 PriorityIndex)
 
 void UPlayerActionComponent::ResetComboNumber()
 {
-	LightComboNumber = 0;
-	HeavyComboNumber = 0;
+	LightComboNumber = EComboNumber::One;
+	HeavyComboNumber = EComboNumber::One;
 }

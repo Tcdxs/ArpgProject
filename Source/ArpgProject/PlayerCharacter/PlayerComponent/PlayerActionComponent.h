@@ -25,8 +25,8 @@ public:
 public:
 
 protected:
-	int32 LightComboNumber = 0;
-	int32 HeavyComboNumber = 0;
+	EComboNumber LightComboNumber = EComboNumber::One;
+	EComboNumber HeavyComboNumber = EComboNumber::One;
 	int32 ActionPriority = 3;
 	int32 PreviousActionPriority = 3;
 
