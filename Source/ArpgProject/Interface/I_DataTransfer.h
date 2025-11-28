@@ -32,4 +32,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MovementMode")
 	EMovementMode GetMovementModeValue (const FString& Key) const;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "TriggerAction")
+	void ToTriggerAction_Jump();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "JumpEnd")
+	void Jump_End();
 };

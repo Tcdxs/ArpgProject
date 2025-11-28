@@ -13,11 +13,16 @@ UCLASS()
 class ARPGPROJECT_API APlayerCharacter : public ACharacter, public II_DataTransfer
 {
 	GENERATED_BODY()
-
+public:
 /*			接口相关			*/
-	
+	UFUNCTION()
 	virtual bool GetBoolValue_Implementation(const FString& Key) const override;
 
+	UFUNCTION()
+	virtual void ToTriggerAction_Jump_Implementation() override;
+
+	UFUNCTION()
+	virtual void Jump_End_Implementation() override;
 	
 /*			 基础设置			*/
 public:

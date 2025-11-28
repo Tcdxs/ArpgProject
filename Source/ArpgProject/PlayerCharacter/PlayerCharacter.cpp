@@ -8,13 +8,27 @@
 
 /*				接口实现				*/
 
-
 bool APlayerCharacter::GetBoolValue_Implementation(const FString& Key) const
 {
 	if (Key == "JumpPressed") return JumpPressed;
 	
 	return false;
 }
+
+void APlayerCharacter::ToTriggerAction_Jump_Implementation()
+{
+	SetJumpingRotationRate(1000.f);
+	Jump();
+	WPressTimer = 0.0f;
+}
+
+void APlayerCharacter::Jump_End_Implementation()
+{
+	JumpPressed = false;
+	ResetRotationRate();
+	StopJumping();
+}
+
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -178,6 +192,7 @@ void APlayerCharacter::A_Attack(const FInputActionValue& Value)
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 	if (bPressingW)
 	{
 		WPressTimer += DeltaTime;
