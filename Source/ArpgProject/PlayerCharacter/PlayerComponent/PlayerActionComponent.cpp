@@ -5,6 +5,7 @@
 
 #include "ArpgProject/NCPP_Enemy/NCPP_Enemy.h"
 #include "ArpgProject/PlayerCharacter/PlayerCharacter.h"
+#include "Navigation/PathFollowingComponent.h"
 
 /*				接口实现				*/
 
@@ -98,28 +99,28 @@ void UPlayerActionComponent::TriggerAction(EActionType ActionType, EActionPriori
 							switch (LightComboNumber)
 							{
 								case EComboNumber::One:
-
-									LightComboNumber = EComboNumber::Two;
+									if (Sword_LightCombo1)ActionDataAsset = Sword_LightCombo1;
+									IncreaseLightComboNumber();
 									return;
 								
 								case EComboNumber::Two:
-
-									LightComboNumber = EComboNumber::Three;
+									if (Sword_LightCombo2)ActionDataAsset = Sword_LightCombo2;
+									IncreaseLightComboNumber();
 									return;
 								
 								case EComboNumber::Three:
-
-									LightComboNumber = EComboNumber::Four;
+									if (Sword_LightCombo3)ActionDataAsset = Sword_LightCombo3;
+									IncreaseLightComboNumber();
 									return;
 								
 								case EComboNumber::Four:
-
-									LightComboNumber = EComboNumber::Five;
+									if (Sword_LightCombo4)ActionDataAsset = Sword_LightCombo4;
+									IncreaseLightComboNumber();
 									return;
 								
 								case EComboNumber::Five:
-
-									LightComboNumber = EComboNumber::One;
+									if (Sword_LightCombo5)ActionDataAsset = Sword_LightCombo5;
+									IncreaseLightComboNumber();
 									return;
 
 								case EComboNumber::Max:
@@ -237,6 +238,11 @@ void UPlayerActionComponent::CE_PlayMontage(FVector F_WarpLocation, FRotator F_W
 	{
 		
 	}
+	if (ActionDataAsset != nullptr)
+	{
+		OwnerCharacter = Cast<ACharacter>(GetOwner());
+		if (ActionDataAsset->Montage) OwnerCharacter->PlayAnimMontage(ActionDataAsset->Montage,1.f,FName("Default"));
+	}
 }
 
 
@@ -261,8 +267,74 @@ inline void UPlayerActionComponent::SetPriority(int32 PriorityIndex)
 	
 }
 
-void UPlayerActionComponent::ResetComboNumber()
+void UPlayerActionComponent::ResetLightComboNumber()
 {
 	LightComboNumber = EComboNumber::One;
+}
+
+void UPlayerActionComponent::ResetHeavyComboNumber()
+{
 	HeavyComboNumber = EComboNumber::One;
+}
+
+void UPlayerActionComponent::IncreaseLightComboNumber()
+{
+	switch(LightComboNumber)
+	{
+		case EComboNumber::One:
+			LightComboNumber = EComboNumber::Two;
+			return;
+		
+		case EComboNumber::Two:
+			LightComboNumber = EComboNumber::Three;
+			return;
+		
+		case EComboNumber::Three:
+			LightComboNumber = EComboNumber::Four;
+			return;
+		
+		case EComboNumber::Four:
+			LightComboNumber = EComboNumber::Five;
+			return;
+		
+		case EComboNumber::Five:
+			LightComboNumber = EComboNumber::One;
+			return;
+		case EComboNumber::Max:
+			return;
+	}
+	
+}
+
+void UPlayerActionComponent::IncreaseHeavyComboNumber()
+{
+	switch(HeavyComboNumber)
+	{
+	case EComboNumber::One:
+		HeavyComboNumber = EComboNumber::Two;
+		return;
+		
+	case EComboNumber::Two:
+		HeavyComboNumber = EComboNumber::Three;
+		return;
+		
+	case EComboNumber::Three:
+		HeavyComboNumber = EComboNumber::Four;
+		return;
+		
+	case EComboNumber::Four:
+		HeavyComboNumber = EComboNumber::Five;
+		return;
+		
+	case EComboNumber::Five:
+		HeavyComboNumber = EComboNumber::One;
+		return;
+	case EComboNumber::Max:
+		return;
+	}
+}
+
+void UPlayerActionComponent::MontageBlendingOut(UAnimMontage* Montage, bool bInterrupted)
+{
+	
 }

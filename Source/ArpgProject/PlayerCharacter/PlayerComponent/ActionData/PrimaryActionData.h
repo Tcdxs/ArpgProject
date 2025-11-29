@@ -23,9 +23,6 @@ public:
 	FName NameOfAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EOwnerType OwnerType;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EActionType ActionType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

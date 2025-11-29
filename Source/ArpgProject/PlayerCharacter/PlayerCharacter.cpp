@@ -182,10 +182,7 @@ void APlayerCharacter::A_JumpPressedEnd(const FInputActionValue& Value)
 
 void APlayerCharacter::A_Attack(const FInputActionValue& Value)
 {
-	if (Test != nullptr)
-	{
 		II_DataTransfer::Execute_ToTriggerAction(PlayerActionComponent, EActionType::Attack, EActionPriorityType::Low);
-	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)

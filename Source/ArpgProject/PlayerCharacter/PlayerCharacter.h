@@ -50,17 +50,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ActionComponents")
 	UPlayerActionComponent* PlayerActionComponent;
 
-	
-	/*			数据资产库		*/
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
-	UPrimaryActionData* Test;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
-	UPrimaryActionData* NoAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
-	UPrimaryActionData* CanCombo;
 protected:
 
 	

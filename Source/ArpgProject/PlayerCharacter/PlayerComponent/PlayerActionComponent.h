@@ -14,13 +14,41 @@ class ARPGPROJECT_API UPlayerActionComponent : public UActorComponent, public II
 {
 	GENERATED_BODY()
 
+	
 	/*					接口相关					*/
 public:
 	virtual void ToTriggerAction_Implementation(EActionType ActionType,  EActionPriorityType ActionDataPriority) override;
 	virtual EMovementMode GetMovementModeValue_Implementation (const FString& Key) const override;
+
+	
+	
+	/*			数据资产库		*/
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* Test;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* NoAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* CanCombo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* Sword_LightCombo1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* Sword_LightCombo2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* Sword_LightCombo3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* Sword_LightCombo4;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	UPrimaryActionData* Sword_LightCombo5;
 	
 	/*					variable			 	*/
-
 
 public:
 
@@ -36,6 +64,9 @@ protected:
 	FRotator WarpRotation_Final;
 
 	TEnumAsByte<EMovementMode> PlayerMovementMode;
+	
+	UPROPERTY()
+	class ACharacter* OwnerCharacter;
 private:
 	EOwnerType OwnerType;
 	EHitDetectType AttackDetectType;
@@ -62,8 +93,16 @@ protected:
 
 	void SetPriority(int32 PriorityIndex);
 
-	void ResetComboNumber();
-	
+	void ResetLightComboNumber();
+
+	void ResetHeavyComboNumber();
+
+	void IncreaseLightComboNumber();
+
+	void IncreaseHeavyComboNumber();
+
+	UFUNCTION()
+	void MontageBlendingOut(UAnimMontage* Montage, bool bInterrupted);
 
 private:
 
